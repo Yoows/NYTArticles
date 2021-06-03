@@ -6,7 +6,8 @@ import LigneNews from "./LigneNews";
 export default class ListSearch extends React.Component {
   constructor(props) {
     super(props);
-    this.seach = this.props.route.params.search; 
+    this.search = this.props.route.params.search; 
+    console.log(this.search);
     this.state = {
       stories: [],
     };
@@ -15,18 +16,19 @@ export default class ListSearch extends React.Component {
 
   componentDidMount() {
     fetch(
-      `https://api.nytimes.com/svc/search/v2/articlesearch.json?q=${props.search}&api-key=sNSoTLuim2yaEwOoh7msGlEAalSYVgCt`
+      `https://api.nytimes.com/svc/search/v2/articlesearch.json?q=${this.search}&api-key=sNSoTLuim2yaEwOoh7msGlEAalSYVgCt`
     )
       .then((response) => response.json())
       .then((responseJson) => {
+        console.log(responseJson)
         this.setState({
-          stories: responseJson.docs,
+          stories: responseJson.response.docs,
         });
       })
       .catch((error) => console.log(error)); //to catch the errors if any
   }
   extractImage = (item) => {
-    if (item.multimedia) {
+    if (item.multimedia.length) {
       return item.multimedia[0].url;
     } else
       return "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg";

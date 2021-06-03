@@ -24,6 +24,12 @@ export default class ListMostStories extends React.Component {
       })
       .catch((error) => console.log(error)); //to catch the errors if any
   }
+  extractImage = (item) => {
+    if (item.multimedia) {
+      return item.media[0]['media-metadata'][0].url;
+    } else
+      return "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg";
+  };
 
   render() {
     return (
@@ -38,7 +44,7 @@ export default class ListMostStories extends React.Component {
               title={item.title}
               date={item.published_date}
               section={item.section}
-              image_url={item.media[0]['media-metadata'][0].url}
+              image_url={this.extractImage(item)}
               story_url={item.url}
               navigation={this.navigation}
             />

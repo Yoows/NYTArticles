@@ -6,25 +6,25 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import ListMostStories from "./ListMostPopular";
 import Business from "./Business";
 import { Header, SearchBar } from "react-native-elements";
+import { Button } from "react-native-elements/dist/buttons/Button";
 
 const Tab = createMaterialTopTabNavigator();
 
 export default class ArticleList extends React.Component {
-  
   constructor(props) {
     super(props);
+    this.navigation = props.navigation;
     this.state = {
-      search: "",
+      search_query: "",
     };
   }
 
-  updateSearch = (search) => {
-    this.setState({ search });
-    console.log(search)
+  handleSearch = () => {
+    console.log("handle Search clicked");
+    this.navigation.navigate("ListSearch", {
+      search: this.state.search_query,
+    });
   };
-  handleSearch = (query) => {
-    
-  }
   render() {
     const { search } = this.state;
     return (
@@ -33,14 +33,24 @@ export default class ArticleList extends React.Component {
           leftComponent={{ icon: "menu", color: "#fff" }}
           centerComponent={
             <SearchBar
+              inputStyle={{ backgroundColor: "white" }}
+              containerStyle={{
+                backgroundColor: "white",
+                borderWidth: 1,
+                borderRadius: 5,
+                width: 200,
+              }}
+              inputContainerStyle={{ backgroundColor: "white", height: 3 }}
+              placeholderTextColor={"white"}
+              onChangeText={(value) => this.setState({ search_query: value })}
               placeholder="Type Here..."
-              onChangeText={this.updateSearch}
-              value={search}
+              value={this.state.search_query}
+              onSubmitEditing={this.handleSearch}
             />
           }
           rightComponent={{ icon: "more", color: "#fff" }}
         />
-        <Tab.Navigator>
+        <Tab.Navigator lazy={true}>
           <Tab.Screen name="Top Stories" component={ListStories} />
           <Tab.Screen name="Business" component={Business} />
           <Tab.Screen name="Most Popular" component={ListMostStories} />
